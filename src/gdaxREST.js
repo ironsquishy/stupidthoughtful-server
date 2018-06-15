@@ -14,8 +14,12 @@ var port = process.env.NODE_ENV || '3000';
 var app = express();
 var http = require('http').Server(app);
 
-// var gdaxREST = require('./src/gdaxREST');
-//var gdaxWEBSOCK = require('./src/gdaxWEBSOCK');
+var gdaxREST = require('./restAPI/gdaxAPI');
+
+// gdaxREST.getHistoricRate()
+// .then(res => console.log(res))
+// .catch(err => console.log(err));
+
 
 
 //app.use(express.cookieParser());
@@ -109,10 +113,6 @@ var http = require('http').Server(app);
 
 // app.get('/error', (req, res) => {
 //     res.send('Error something went wrong...');
-// });
-
-// app.get('*', (req, res) => {
-//     res.send('Server responded');
 // });
 
 app.listen(port, () => console.log('App running on port 3000 🔥'));
