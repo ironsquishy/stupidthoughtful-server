@@ -1,3 +1,5 @@
+/*Also Referred as Coinbase Pro*/
+
 const GDAX = require('gdax');
 
 
