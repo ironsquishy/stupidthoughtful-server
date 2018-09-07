@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "pm2 start server.js --watch --name cloud-crypto-server"
+    "dev": "pm2 start server.js --watch --name cloud-crypto-server"
   },
   "author": "Allen Space",
   "license": "ISC",
@@ -14,8 +14,9 @@
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
-    "gdax": "https://github.com/ironsquishy/gdax-node.git",
+    "gdax": "0.8.0",
     "http": "0.0.0",
+    "inspect": "0.0.2",
     "moment": "^2.21.0",
     "passport": "^0.4.0",
     "passport-coinbase": "^0.1.2",

@@ -2,29 +2,38 @@ const CONFIG = require('../config');
 
 var moment = require('moment');
 var appWebSoc = require('express')();
-var newServer = require('http').Server(appWebSoc);
-var io = require('socket.io')(newServer);
+var websockServer = require('http').Server(appWebSoc);
+var io = require('socket.io')(websockServer);
 
-var GdaxWebsock = require('./websocks/coinbasePro');
 
+//var GdaxWebsock = require('./websocks/coinbasePro');
 //const Profile = (process.env.NODE_ENV == "production") ? CONFIG.PROD :  CONFIG.TESTNET;
-const Profile = CONFIG.TESTNET;
+var GdaxWebsock = require('gdax');
+
+const Profile = CONFIG.PROD;
 var port = 3010;
 
-newServer.listen(port, () => console.log('Started websock server on 3010...'));
+websockServer.listen(port, () => console.log('Started websock server on 3010...'));
 
 var btcTicker = io.of('/websock/btc');
-var ltcTicker = io.of('/websock/ltc');
-var ethTicker = io.of('/websock/eth');
+//var ltcTicker = io.of('/websock/ltc');
+//var ethTicker = io.of('/websock/eth');
 
 
 
 btcTicker.on('connection', (socket) => {
     console.log('User connected at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
     try {
-        let webSock = new GdaxWebsock(Profile, {product_ids: ['BTC-USD'], channels:['ticker']});
+        //From forked GDAX API...
+        // let webSock = new GdaxWebsock(Profile, {product_ids: ['BTC-USD'], channels:['ticker']});
+        //webSock.connect();
+        let webSock = new GdaxWebsock.WebsocketClient(['BTC-USD'],'wss://ws-feed.pro.coinbase.com', {
+            key : CONFIG.PROD.auth.key,
+            secret : CONFIG.PROD.auth.secret,
+            passphrase : CONFIG.PROD.auth.passphrase
+        },{channels : ['ticker']});
 
-        webSock.connect();
+        
 
         webSock.on('open', res => {
             console.log('GDAX websock open at', moment().format('MMMM Do YYYY, h:mm:ss a'));
@@ -35,7 +44,6 @@ btcTicker.on('connection', (socket) => {
             if(msg.type == 'ticker'){
                 socket.emit('ticker', msg)
             }
-            console.log('Message:', msg);
         });
 
         webSock.on('error', reason => {
@@ -74,53 +82,53 @@ btcTicker.on('connection', (socket) => {
     
 });
 
-ltcTicker.on('connection', (socket) => {
-    console.log('User connected BTC-USD ticker at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
+// ltcTicker.on('connection', (socket) => {
+//     console.log('User connected BTC-USD ticker at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
 
-    let webSock = new GdaxWebsock(Profile, {product_ids: ['LTC-USD'], channels:['ticker']});
+//     let webSock = new GdaxWebsock(Profile, {product_ids: ['LTC-USD'], channels:['ticker']});
 
-    webSock.connect();
+//     webSock.connect();
 
-    webSock.on('open', res => {
-        console.log('GDAX websock open at', moment().format('MMMM Do YYYY, h:mm:ss a'));
-        socket.emit('greet', {connection: true});
-    });
+//     webSock.on('open', res => {
+//         console.log('GDAX websock open at', moment().format('MMMM Do YYYY, h:mm:ss a'));
+//         socket.emit('greet', {connection: true});
+//     });
 
-    webSock.on('message', msg => {
-        if(msg.type == 'ticker'){
-            socket.emit('ticker', msg)
-        }
-    });
+//     webSock.on('message', msg => {
+//         if(msg.type == 'ticker'){
+//             socket.emit('ticker', msg)
+//         }
+//     });
     
-    socket.on('disconnect', () => {
-        webSock.disconnect();
-        console.log('User disconnected at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
-    });
-});
+//     socket.on('disconnect', () => {
+//         webSock.disconnect();
+//         console.log('User disconnected at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
+//     });
+// });
 
-ethTicker.on('connection', (socket) => {
-    console.log('User connected BTC-USD ticker at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
+// ethTicker.on('connection', (socket) => {
+//     console.log('User connected BTC-USD ticker at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
 
-    let webSock = new GdaxWebsock(Profile, {product_ids: ['ETH-USD'], channels:['ticker']});
+//     let webSock = new GdaxWebsock(Profile, {product_ids: ['ETH-USD'], channels:['ticker']});
 
-    webSock.connect();
+//     webSock.connect();
 
-    webSock.on('open', res => {
-        console.log('GDAX websock open at', moment().format('MMMM Do YYYY, h:mm:ss a'));
-        socket.emit('greet', {connection: true});
-    });
+//     webSock.on('open', res => {
+//         console.log('GDAX websock open at', moment().format('MMMM Do YYYY, h:mm:ss a'));
+//         socket.emit('greet', {connection: true});
+//     });
 
-    webSock.on('message', msg => {
-        if(msg.type == 'ticker'){
-            socket.emit('ticker', msg)
-        }
-    });
+//     webSock.on('message', msg => {
+//         if(msg.type == 'ticker'){
+//             socket.emit('ticker', msg)
+//         }
+//     });
     
-    socket.on('disconnect', () => {
-        webSock.disconnect();
-        console.log('User disconnected at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
-    });
-});
+//     socket.on('disconnect', () => {
+//         webSock.disconnect();
+//         console.log('User disconnected at:', moment().format('MMMM Do YYYY, h:mm:ss a'));
+//     });
+// });
 
 
 
