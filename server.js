@@ -1,7 +1,5 @@
 /* Start of Server*/
-
-require('./src/gdaxREST');
-require('./src/websockService');
+require('./src');
 
 
 

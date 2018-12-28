@@ -1,2 +1,2 @@
-require('./gdaxRest');
+require('./restService');
 require('./websockService');

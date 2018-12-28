@@ -42,9 +42,6 @@ DS_Store
 !.vscode/extensions.json
 
 
-
-# NPM Dependency
-package-lock.json
-
-#Do not send to public
 config.json
+data
+*.Copy.*
