@@ -21,7 +21,7 @@ app.use(JWT());
 
 
 app.use('/user', require('./restAPI/models/users/users.route'));
-app.use('/test', require('./restAPI/models/test/connection.route'));
+app.use('/test', require('./restAPI/models/test/tests.route'));
 //Global Error...
 app.use(ErrorHandler);
 

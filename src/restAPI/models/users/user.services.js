@@ -46,7 +46,13 @@ async function create(userParam){
     if(userParam.password){
         user.hash = Bcrypt.hashSync(userParam.password, 10);
     }
-    await user.save();
+    user = await user.save();
+
+    if(user && Bcrypt.compareSync(userParam.password, user.hash)){
+        var { hash, ...userWithoutHash } = user.toObject();
+        var token = JWT.sign({sub : user.id }, CONFIG.Database.secret);
+        return { ...userWithoutHash, token };
+    }
 }
 
 async function update(id, userParam){

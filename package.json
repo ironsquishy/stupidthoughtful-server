@@ -5,11 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pm2 start server.js --watch --name cloud-crypto-server"
+    "dev": "pm2 start server.js --watch --name cloud-crypto-server",
+    "dev-server": "node server.js"
   },
   "author": "Allen Space",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
