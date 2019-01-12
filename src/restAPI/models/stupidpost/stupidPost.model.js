@@ -5,9 +5,10 @@ const Scheme = mongoose.Schema;
 
 var stupidPostModel = {
     owner : { type : String, unique : true, required : true},
-    createDate: { typ : Date, default : Date.now },
+    createDate: { type : Date, required: true, default : Date.now },
     message : { type: String, required : true},
-    stpdHash : { type: String, requireed : true, default : defaultStpdHash}
+    stpdHash : { type: String, required : true, default : defaultStpdHash},
+    votes : {type: Number, default: 0}
     // responses : []
 }
 function defaultStpdHash(){

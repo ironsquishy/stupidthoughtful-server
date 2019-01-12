@@ -3,16 +3,20 @@ const StpdPostServices = require('./stupidPost.services');
 
 /*Post*/
 Router.post('/create', createStpdPost);
-Router.post('update', updateStpdPost);
+Router.post('/update', updateStpdPost);
 
-/*Get*/
-Router.get('/all', getAllStpdPost);
-Router.get('/:stpdHash', getStpdPostByStpdHash);
-Router.get('/latest', getLatestStpdPosts);
-/*Global Get StpdPost*/
-Router.get('/global', getAllGlobalStpdPost);
-Router.get('/gloabal/latest', getLatestGlobalStpdPost);
-Router.get('/global/:stpdHash', getGlobalStpdPostByStpdHash);
+/*Get User*/
+Router.get('/', function(req, res){
+    res.json({ message : 'success'});
+});
+Router.get('/all', getAllUser);
+Router.get('/:stpdHash', getUserPostByHash);
+Router.get('/latest', getUserLatest);
+
+/*Get Global*/
+Router.get('/community/all', getCommunityAll);
+Router.get('/community/latest', getCommunityLatest);
+Router.get('/community/:stpdHash', getCommunityByHash);
 
 /*Put*/
 Router.put('/:stpdHash', updateStpdPost);
@@ -20,6 +24,46 @@ Router.put('/:stpdHash', updateStpdPost);
 /*Delete */
 Router.delete('/:stpdHash', deleteStpdPost);
 
+module.exports = Router;
 
+function createStpdPost(req, res, next){
 
+}
 
+function updateStpdPost(req, res, next){
+
+}
+
+function getAllUser(req, res, next){
+
+}
+
+function getUserPostByHash(req, res, next){
+
+}
+
+function getUserLatest(req, res, next){
+
+}
+
+function getCommunityLatest(req, res, next){
+    StpdPostServices.getCommunityLatest()
+    .then(recentPost => res.json(recentPost))
+    .catch(err => next(err));
+}
+
+function getCommunityAll(req, res, next){
+    StpdPostServices.getAllbyCommunity(req.params.limit)
+    .then(posts => posts ? res.json(posts) : res.json({}))
+    .catch(err => next(err));
+}
+
+function getCommunityByHash(req, res, next){
+    StpdPostServices.getCommunityByStpdHash(req.params.stpdHash)
+    .then(stpdPost => res.json(stpdPost))
+    .catch(err => next(err));
+}
+
+function deleteStpdPost(req, res, next) {
+    
+}

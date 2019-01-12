@@ -9,7 +9,10 @@ module.exports = {
     getById,
     createPost,
     updatePost,
-    getAll
+    getAllbyUser,
+    getAllbyCommunity,
+    getCommunitylatest,
+    getCommunityByHash
 };
 
 async function getById (id){
@@ -30,6 +33,16 @@ async function updatePost(postParams){
     return await updatePost.save();
 
 }
-async function getAll(){
+async function getAllbyUser(){
     return await StpdPost.find();
+}
+async function getCommunitylatest(){
+    return await StpdPost.findOne().sort({ createdDate : -1 });
+}
+async function getCommunityByHash(_stpdHash){
+    return await StpdPost.findOne({ stpdHash : _stpdHash });
+}
+
+async function getAllbyCommunity(rtnLimit = 10) {
+    return await StpdPost.find().sort({ createdDate : -1 }).limit(rtnLimit);
 }
