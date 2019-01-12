@@ -1,13 +1,12 @@
-# Cloud Crypto Sever
-
-Server using Coinbase Pro APIs, ExpressJS, and SocketIO
+# Stupid Server
+Using the buzzword NodeJS, express, and socket IO
 
 ## Installation
 
 1. Install npm packages `npm install`
-2. Run as attached `node .`
+2. Run as attached `npm start`
 3. Run as detattached using pm2 `npm run dev`. Have to have pm2 installed globally
 
-Credit to Coinbase Pro API and Data.
+Credit to myself going on 30 minutes walks. 
 
 
