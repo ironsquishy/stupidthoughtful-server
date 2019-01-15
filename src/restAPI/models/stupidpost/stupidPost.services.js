@@ -3,7 +3,8 @@ const JWT  = require('jsonwebtoken');
 const Bcrypt = require('bcryptjs');
 
 const DB = require('../../helpers/db');
-const StpdPost = require('./stupidPost.model');
+const { StpdPost } = require('./stupidPost.model');
+const User = require('../users/user.model');
 
 module.exports = {
     getById,
@@ -11,7 +12,7 @@ module.exports = {
     updatePost,
     getAllbyUser,
     getAllbyCommunity,
-    getCommunitylatest,
+    getCommunityLatest,
     getCommunityByHash
 };
 
@@ -20,27 +21,34 @@ async function getById (id){
 }
 
 async function createPost (postParams){
-    var newPost = new StpdPost(postParams);
+    var postUser = await User.findOne({ username: postParams.owner });
+    var newPost = new StpdPost({ ownerId : postUser._id, ...postParams });
 
-    return await newPost.save();
+    postUser.ownedPosts.push(newPost);
+
+    return { User: await postUser.save(), post : await newPost.save() };  
 }
 
 async function updatePost(postParams){
     var oldPost = await StpdPost.find({ stpHash : postParams.stpHash });
 
-    var upadetedPost = Object.assign(oldPost, postParams);
+    var updatePost = Object.assign(oldPost, postParams);
 
     return await updatePost.save();
 
 }
-async function getAllbyUser(){
+async function getAllbyUser(requestBody){
+    
+    var { ownedPosts } = await User.findOne({ username : requestBody.username});
+
+    return ownedPosts;
+}
+async function getCommunityLatest(){
+    //return await User.find().populate('ownedPosts');
     return await StpdPost.find();
 }
-async function getCommunitylatest(){
-    return await StpdPost.findOne().sort({ createdDate : -1 });
-}
-async function getCommunityByHash(_stpdHash){
-    return await StpdPost.findOne({ stpdHash : _stpdHash });
+async function getCommunityByHash(requestBody){
+    return await StpdPost.findOne(requestBody);
 }
 
 async function getAllbyCommunity(rtnLimit = 10) {

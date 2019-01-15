@@ -4,15 +4,16 @@ const bcrypt = require('bcryptjs');
 const Scheme = mongoose.Schema;
 
 var stupidPostModel = {
+    ownerId : {type : mongoose.Schema.Types.ObjectId, required  : true,  ref : 'User'},
     owner : { type : String, unique : true, required : true},
     createDate: { type : Date, required: true, default : Date.now },
     message : { type: String, required : true},
     stpdHash : { type: String, required : true, default : defaultStpdHash},
-    votes : {type: Number, default: 0}
-    // responses : []
+    stpdResponses : [{ type : mongoose.Schema.Types.ObjectId, ref : 'StpdResponse'}]
 }
 function defaultStpdHash(){
-    return bcrypt.hashSync(this.createDate, 'salty');
+    
+    return bcrypt.hashSync(this.createDate.toISOString(), 10);
 }
 
 const stupidPostScheme = new Scheme(stupidPostModel).set('toJson', { virtual : true });

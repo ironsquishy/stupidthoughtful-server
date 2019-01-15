@@ -27,7 +27,10 @@ Router.delete('/:stpdHash', deleteStpdPost);
 module.exports = Router;
 
 function createStpdPost(req, res, next){
-
+    
+    StpdPostServices.createPost(req.body)
+    .then( resPost => resPost ? res.json(resPost) : res.json({}))
+    .catch(err => next(err));
 }
 
 function updateStpdPost(req, res, next){
@@ -35,7 +38,9 @@ function updateStpdPost(req, res, next){
 }
 
 function getAllUser(req, res, next){
-
+    StpdPostServices.getAllbyUser(req.body)
+    .then(resPosts => resPosts ? res.json(resPosts) : res.json({}))
+    .catch(err => next(err))
 }
 
 function getUserPostByHash(req, res, next){
@@ -47,8 +52,9 @@ function getUserLatest(req, res, next){
 }
 
 function getCommunityLatest(req, res, next){
+   
     StpdPostServices.getCommunityLatest()
-    .then(recentPost => res.json(recentPost))
+    .then(recentPost => recentPost ? res.json(recentPost) : res.json({}))
     .catch(err => next(err));
 }
 
