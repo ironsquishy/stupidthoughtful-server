@@ -3,7 +3,7 @@ const JWT  = require('jsonwebtoken');
 const Bcrypt = require('bcryptjs');
 
 const DB = require('../../helpers/db');
-const { StpdPost } = require('./stupidPost.model');
+const StpdPost = require('./stupidPost.model');
 const User = require('../users/user.model');
 
 module.exports = {
