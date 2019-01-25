@@ -21,6 +21,7 @@ async function authenticate({ username, password }){
         var { hash, ...userWithoutHash } = user.toObject();
         var token = JWT.sign({sub : user.id }, CONFIG.Database.secret);
         
+        console.log(`User logged in: ${username} at ${new Date().toLocaleDateString()}`);
         return { ...userWithoutHash, token };
     }
 
@@ -48,11 +49,14 @@ async function create(userParam){
     }
     user = await user.save();
 
+    console.log(`New user created: ${user.username} at ${new Date().toLocaleDateString()}`);
+
     if(user && Bcrypt.compareSync(userParam.password, user.hash)){
         var { hash, ...userWithoutHash } = user.toObject();
         var token = JWT.sign({sub : user.id }, CONFIG.Database.secret);
         return { ...userWithoutHash, token };
     }
+    
 }
 
 async function update(id, userParam){

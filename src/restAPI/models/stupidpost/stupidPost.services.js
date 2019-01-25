@@ -6,6 +6,15 @@ const DB = require('../../helpers/db');
 const StpdPost = require('./stupidPost.model');
 const User = require('../users/user.model');
 
+const EmptyPost = {
+    owner : 'Not Available',
+    createDate : '00000000',
+    stpdHash : '000000',
+    message : 'No Post available',
+    error : 'No available post',
+    stpdResponses : []
+};
+
 module.exports = {
     getById,
     createPost,
@@ -21,12 +30,22 @@ async function getById (id){
 }
 
 async function createPost (postParams){
+    console.log('New Post:', postParams);
+    var response = {};
+
     var postUser = await User.findOne({ username: postParams.owner });
     var newPost = new StpdPost({ ownerId : postUser._id, ...postParams });
 
     postUser.ownedPosts.push(newPost);
 
-    return { User: await postUser.save(), post : await newPost.save() };  
+    await postUser.save();
+    await newPost.save();
+
+    response.newPost = newPost;
+    response.ownedPosts = postUser.ownedPosts;
+
+    return response;
+     
 }
 
 async function updatePost(postParams){
@@ -44,8 +63,14 @@ async function getAllbyUser(requestBody){
     return ownedPosts;
 }
 async function getCommunityLatest(){
-    //return await User.find().populate('ownedPosts');
-    return await StpdPost.find();
+    
+    console.log('Get Communit latest Requested');
+
+    var returnPosts = await StpdPost.find();
+    if(!returnPosts.length) {
+        returnPosts = EmptyPost;
+    }
+    return returnPosts;
 }
 async function getCommunityByHash(requestBody){
     return await StpdPost.findOne(requestBody);

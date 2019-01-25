@@ -5,7 +5,7 @@ const Scheme = mongoose.Schema;
 
 var stupidPostModel = {
     ownerId : {type : mongoose.Schema.Types.ObjectId, required  : true,  ref : 'User'},
-    owner : { type : String, unique : true, required : true},
+    owner : { type : String, required : true},
     createDate: { type : Date, required: true, default : Date.now },
     message : { type: String, required : true},
     stpdHash : { type: String, required : true, default : defaultStpdHash},

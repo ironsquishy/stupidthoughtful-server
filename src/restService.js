@@ -22,7 +22,7 @@ app.use(JWT());
 
 app.use('/user', require('./restAPI/models/users/users.route'));
 app.use('/test', require('./restAPI/models/test/tests.route'));
-app.use('/stpdpost', require('./restAPI/models/stupidpost/stupidPost.route'));
+app.use('/stpdpost', CORS(), require('./restAPI/models/stupidpost/stupidPost.route'));
 app.use('/voting', require('./restAPI/models/vote/vote.route'));
 
 //Global Error...
