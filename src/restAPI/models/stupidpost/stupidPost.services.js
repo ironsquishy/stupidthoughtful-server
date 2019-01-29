@@ -68,7 +68,7 @@ async function getCommunityLatest(){
 
     var returnPosts = await StpdPost.find();
     if(!returnPosts.length) {
-        returnPosts = EmptyPost;
+        returnPosts = [EmptyPost];
     }
     return returnPosts;
 }

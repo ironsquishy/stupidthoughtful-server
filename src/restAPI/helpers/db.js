@@ -1,6 +1,8 @@
 const CONFIG = require('../../../config');
 const mongoose = require('mongoose');
 
+
+
 mongoose.connect(CONFIG.Database.connectionStr, { useNewUrlParser: true })
 .then(() => {
     console.log('Successfully connected');
