@@ -45,3 +45,4 @@ DS_Store
 config.json
 data
 *.yml
+nginx-server
