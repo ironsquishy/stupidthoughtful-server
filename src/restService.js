@@ -6,7 +6,7 @@ var CORS = require('cors');
 
 const PORT = 3000;
 //Server Specific
-var JWT = require('./restAPI/helpers/jwt');
+//var JWT = require('./restAPI/helpers/jwt');
 var ErrorHandler = require('./restAPI/helpers/errors');
 
 //Logging
@@ -17,8 +17,10 @@ var http = require('http').Server(app);
 
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
-app.use(JWT());
+//app.use(JWT());
 
+/*Passport JWT */
+require('./auth-passport/middleware');
 
 app.use('/user', require('./restAPI/models/users/users.route'));
 app.use('/test', require('./restAPI/models/test/tests.route'));

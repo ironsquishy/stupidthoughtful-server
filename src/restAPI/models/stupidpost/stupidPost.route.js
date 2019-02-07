@@ -1,34 +1,36 @@
 const Router = require('express').Router();
 const StpdPostServices = require('./stupidPost.services');
 
+const passport = require('passport');
+
 /*Post*/
-Router.post('/create', createStpdPost);
-Router.post('/update', updateStpdPost);
+Router.post('/create', passport.authenticate('jwt', { session : false }), createStpdPost);
+//Router.post('/update', passport.authenticate('jwt', { session : false }), updateStpdPost);
 
 /*Get User*/
 Router.get('/', function(req, res){
     res.json({ message : 'success'});
 });
-Router.get('/all', getAllUser);
-Router.get('/:stpdHash', getUserPostByHash);
-Router.get('/latest', getUserLatest);
+Router.get('/all', passport.authenticate('jwt', { session : false }),getAllUser);
+Router.get('/:stpdHash', passport.authenticate('jwt', { session : false }),getUserPostByHash);
+Router.get('/latest', passport.authenticate('jwt', { session : false }),getUserLatest);
 
 /*Get Global*/
 Router.get('/community/all', getCommunityAll);
 Router.get('/community/latest', getCommunityLatest);
 Router.get('/community/:stpdHash', getCommunityByHash);
 
-/*Put*/
-Router.put('/:stpdHash', updateStpdPost);
+/*Put Update a Stupid Post*/
+Router.put('/:stpdHash', passport.authenticate('jwt', { session : false }), updateStpdPost);
 
-/*Delete */
+/*Delete a Stupid Post*/
 Router.delete('/:stpdHash', deleteStpdPost);
 
 module.exports = Router;
 
 function createStpdPost(req, res, next){
     
-    StpdPostServices.createPost(req.body)
+    StpdPostServices.createPost({ user : req.user, post: req.body})
     .then( resPost => resPost ? res.json(resPost) : res.json({}))
     .catch(err => next(err));
 }

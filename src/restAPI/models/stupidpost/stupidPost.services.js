@@ -29,12 +29,20 @@ async function getById (id){
     return await stpdPost.findById(id);
 }
 
-async function createPost (postParams){
-    console.log('New Post:', postParams);
+async function createPost (_params){
     var response = {};
+    var postUser = _params.user;
+    var newPost = _params.post;
 
-    var postUser = await User.findOne({ username: postParams.owner });
-    var newPost = new StpdPost({ ownerId : postUser._id, ...postParams });
+
+    var dbQuery = { 
+        ownerId : newPost._id, 
+        owner : postUser.username, 
+        message : newPost.message
+    }
+    //var postUser = await User.findOne({ username: postParams.owner });
+    //var postUser = await User.findById(postParams._id);
+    newPost = new StpdPost(dbQuery);
 
     postUser.ownedPosts.push(newPost);
 
@@ -43,7 +51,8 @@ async function createPost (postParams){
 
     response.newPost = newPost;
     response.ownedPosts = postUser.ownedPosts;
-
+    
+    console.log(`New post created from ${postUser.username}`);
     return response;
      
 }

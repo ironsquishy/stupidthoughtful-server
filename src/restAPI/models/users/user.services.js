@@ -11,7 +11,8 @@ module.exports = {
     getById,
     create,
     update,
-    delete : deleteHTTP
+    delete : deleteHTTP,
+    includePosts
 };
 
 async function authenticate({ username, password }){
@@ -79,4 +80,13 @@ async function update(id, userParam){
 
 async function deleteHTTP(id){
     await User.findByIdAndRemove(id);
+}
+
+async function includePosts(_user){
+    try {
+        return await User.findById(_user._id).populate('ownedPosts');
+
+    } catch (err) {
+        return Promise.reject(err);
+    }
 }
