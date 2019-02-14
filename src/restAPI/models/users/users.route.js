@@ -44,7 +44,7 @@ function getCurrent(req, res, next){
 
     UserServices.includePosts(req.user)
     .then(populatedUser => populatedUser ? res.json(populatedUser) : res.sendStatus(404))
-    .catch(err => next(er));
+    .catch(err => next(err));
 
     // UserServices.getById(req.user.sub)
     // .then(user => user ? res.json(user) : res.sendStatus(404))

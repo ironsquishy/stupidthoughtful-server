@@ -20,7 +20,7 @@ async function authenticate({ username, password }){
 
     if(user && Bcrypt.compareSync(password, user.hash)){
         var { hash, ...userWithoutHash } = user.toObject();
-        var token = JWT.sign({sub : user.id }, CONFIG.Database.secret);
+        var token = JWT.sign({sub : user.id }, CONFIG.Database.secret, { expiresIn : '30m'});
         
         console.log(`User logged in: ${username} at ${new Date().toLocaleDateString()}`);
         return { ...userWithoutHash, token };
