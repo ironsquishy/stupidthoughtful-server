@@ -12,6 +12,7 @@ Router.get('/', getAll);
 Router.get('/current', passport.authenticate('jwt', { session : false }), getCurrent);
 /* Status of allowing to post */
 Router.get('/allowed', passport.authenticate('jwt', { session : false }), allowedToPost);
+Router.get('/checkAvalibility', getAvailibilty);
 
 //Put
 Router.put('/:id', update);
@@ -27,7 +28,6 @@ function authenticate(req, res, next){
     .catch(err => next(err));
 }
 function register(req, res, next){
-    console.log('Called router register:', req.body);
     //res.json({ message : 'Successful!'});
     UserServices.create(req.body)
     .then(user => res.json(user))
@@ -42,7 +42,7 @@ function getAll(req, res, next){
 
 function getCurrent(req, res, next){
 
-    UserServices.includePosts(req.user)
+    UserServices.getCurrentUser(req.user)
     .then(populatedUser => populatedUser ? res.json(populatedUser) : res.sendStatus(404))
     .catch(err => next(err));
 
@@ -70,5 +70,16 @@ function deletHTTP(req, res, next){
 }
 
 function allowedToPost(req, res, next){
+    
     res.json(req.user.allowedPost);
+    // UserServices.allowedToPost(req.query.username)
+    // .then(allowed => allowed ? res.json(allowed) : res.json(false))
+    // .catch( err => next(err));
+}
+
+function getAvailibilty(req, res, next){
+  
+    UserServices.getCheckNameAvailable(req.query.username)
+    .then( isAvailable => res.json(isAvailable))
+    .catch(err => next(err));
 }

@@ -6,6 +6,8 @@ const DB = require('../../helpers/db');
 const StpdPost = require('./stupidPost.model');
 const User = require('../users/user.model');
 
+const moment = require('moment');
+
 const EmptyPost = {
     owner : 'Not Available',
     createDate : '00000000',
@@ -23,6 +25,7 @@ module.exports = {
     getAllbyCommunity,
     getCommunityLatest,
     getCommunityByHash
+    
 };
 
 async function getById (id){
@@ -40,20 +43,28 @@ async function createPost (_params){
         owner : postUser.username, 
         message : newPost.message
     }
-    //var postUser = await User.findOne({ username: postParams.owner });
-    //var postUser = await User.findById(postParams._id);
+    //var postUser = await User.findOne({ username: postUser.username });
+    //postUser = await User.findById(postUser._id);
     newPost = new StpdPost(dbQuery);
 
     postUser.ownedPosts.push(newPost);
 
+    postUser.lastPostDate = Date.now();
+    postUser.nextPostDate = new moment().add(3, 'm').toDate();
+    postUser.allowedPost = false;
+
     await postUser.save();
     await newPost.save();
 
-    response.newPost = newPost;
-    response.ownedPosts = postUser.ownedPosts;
+    let populateQuery = {
+        path : 'ownedPosts',
+        options : {
+            sort : { createDate : -1 }
+        }
+    }
+    postUser = await User.findById(postUser._id).select('-hash').populate(populateQuery);
     
-    console.log(`New post created from ${postUser.username}`);
-    return response;
+    return { ...postUser.toObject() };
      
 }
 
@@ -73,9 +84,7 @@ async function getAllbyUser(requestBody){
 }
 async function getCommunityLatest(){
     
-    console.log('Get Communit latest Requested');
-
-    var returnPosts = await StpdPost.find();
+    var returnPosts = await StpdPost.find().sort({ createDate : -1}).limit(2);
     if(!returnPosts.length) {
         returnPosts = [EmptyPost];
     }
@@ -88,3 +97,4 @@ async function getCommunityByHash(requestBody){
 async function getAllbyCommunity(rtnLimit = 10) {
     return await StpdPost.find().sort({ createdDate : -1 }).limit(rtnLimit);
 }
+

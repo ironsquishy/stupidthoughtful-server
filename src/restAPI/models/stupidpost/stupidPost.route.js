@@ -15,6 +15,7 @@ Router.get('/all', passport.authenticate('jwt', { session : false }),getAllUser)
 Router.get('/:stpdHash', passport.authenticate('jwt', { session : false }),getUserPostByHash);
 Router.get('/latest', passport.authenticate('jwt', { session : false }),getUserLatest);
 
+
 /*Get Global*/
 Router.get('/community/all', getCommunityAll);
 Router.get('/community/latest', getCommunityLatest);
@@ -75,3 +76,4 @@ function getCommunityByHash(req, res, next){
 function deleteStpdPost(req, res, next) {
     
 }
+
