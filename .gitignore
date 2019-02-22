@@ -41,7 +41,8 @@ DS_Store
 !.vscode/launch.json
 !.vscode/extensions.json
 
-
+#Application Specific
+docker-compose.yml
 config.json
 data
 *.yml
