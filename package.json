@@ -1,5 +1,5 @@
 {
-  "name": "Stupidserver",
+  "name": "stupid-though-client",
   "version": "1.0.0",
   "description": "Use of intergrating with other APIs",
   "main": "server.js",
