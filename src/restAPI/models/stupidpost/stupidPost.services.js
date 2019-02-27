@@ -43,8 +43,7 @@ async function createPost (_params){
         owner : postUser.username, 
         message : newPost.message
     }
-    //var postUser = await User.findOne({ username: postUser.username });
-    //postUser = await User.findById(postUser._id);
+
     newPost = new StpdPost(dbQuery);
 
     postUser.ownedPosts.push(newPost);
@@ -83,12 +82,24 @@ async function getAllbyUser(requestBody){
     return ownedPosts;
 }
 async function getCommunityLatest(){
-    
-    var returnPosts = await StpdPost.find().sort({ createDate : -1}).limit(2);
-    if(!returnPosts.length) {
-        returnPosts = [EmptyPost];
+    try {
+        let populateQuery = {
+            path : "stpdResponses",
+            options : {
+                sort : { createDate : -1 }
+            }
+        };
+
+        let returnPosts = await StpdPost.find().sort({ createDate : -1}).limit(2).populate(populateQuery);
+        
+        if(!returnPosts.length) {
+            returnPosts = [EmptyPost];
+        }
+        return returnPosts;
+    } catch (err) {
+        return Promise.reject(err);
     }
-    return returnPosts;
+    
 }
 async function getCommunityByHash(requestBody){
     return await StpdPost.findOne(requestBody);

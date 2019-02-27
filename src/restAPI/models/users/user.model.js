@@ -10,9 +10,10 @@ var UserModal = {
     hash : {type : String, required : true},
     createdDate : { type : Date, default : Date.now },
     allowedPost : { type : Boolean, default : true },
-    ownedPosts : [{ type: mongoose.Schema.Types.ObjectId, ref: 'StupidPost'}],
     lastPostDate : { type : Date },
-    nextPostDate : { type : Date }
+    nextPostDate : { type : Date },
+    ownedPosts : [{ type: mongoose.Schema.Types.ObjectId, ref: 'StupidPost'}],
+    ownedResponses : [{ type : mongoose.Schema.Types.ObjectId, ref : 'StpdResponse'}]
 }
 
 const UserSchema = new Schema(UserModal).set('toJSON', { virtual : true });
