@@ -3,22 +3,23 @@ const moment = require('moment');
 
 class UserLogic{
     constructor(){
-
     }
 
-
+    addNextPostDate(){
+        return new moment().add(1, 'h').toDate();
+    }
 
     ifAllowedToPost(currentPostDate, nextPostDate){
         if(!currentPostDate){
             return true;
         }
         if(!nextPostDate){
-            nextPostDate = new moment(currentPostDate).add(1, 'm');
+            nextPostDate = this.addNextPostDate();
         }
-        //var nextPostDate = new moment(currentPostDate).add(24, 'h');
-        var currentDate = new moment();
 
-        return nextPostDate < currentDate;
+        var currentDate = new moment().toDate();
+
+        return nextPostDate.getTime() < currentDate.getTime();
     }
 }
 

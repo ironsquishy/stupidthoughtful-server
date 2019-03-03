@@ -5,6 +5,7 @@ const Bcrypt = require('bcryptjs');
 const DB = require('../../helpers/db');
 const StpdPost = require('./stupidPost.model');
 const User = require('../users/user.model');
+const UserLogic = require('../users/user.logic');
 
 const moment = require('moment');
 
@@ -49,7 +50,7 @@ async function createPost (_params){
     postUser.ownedPosts.push(newPost);
 
     postUser.lastPostDate = Date.now();
-    postUser.nextPostDate = new moment().add(3, 'm').toDate();
+    postUser.nextPostDate = UserLogic.addNextPostDate();
     postUser.allowedPost = false;
 
     await postUser.save();
