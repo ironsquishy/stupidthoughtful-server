@@ -27,12 +27,23 @@ async function getResponsesByPost(_postId){
 
 }
 
-async function createResponse(responseParams){
-    var newResponse = new StpdResponse(responseParams);
-    var currentPost = await StpdPost.findById(responseParams.postId);
+async function createResponse(newResponse){
+    try {
+        
+        newResponse = new StpdResponse(newResponse);
+        let currentPost = await StpdPost.findById(newResponse.postId);
 
-    currentPost.responses.push(newResponse);
-    return { newResponse : await newResponse.save(), post: await currentPost.save() };
+        currentPost.stpdResponses.push(newResponse);
+
+        await newResponse.save();
+
+        return await currentPost.save();
+
+    } catch(error){
+        return Promise.reject(error);
+    }
+
+    
 }
 
 async function updateResponse(updateParams){
