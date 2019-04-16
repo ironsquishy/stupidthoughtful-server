@@ -5,27 +5,35 @@ const User = require('../users/user.model');
 const MockResponseData = [
     {
         owner : 'ironsquishy',
-        message : 'You are stupid',
+        message : 'Hey look at me I made a response.',
         postId : 1234,
         ownerId : 4356,
         responseId : 1231895490,
         votes : 3
     },
     {
-        owner : 'John Doe',
-        message : 'What a crazy world...',
+        owner : 'Thor',
+        message : 'You humans are some crazy individuals.',
         postId : 3456,
         ownerId : 1076,
         responseId : 42318952342,
         votes : 9
     },
     {
-        owner : 'Stevie Wonder',
-        message : 'YEAH !! boy...',
+        owner : 'Captain America',
+        message : 'YEAH!! boy...',
         postId : 3377,
         ownerId : 8964,
         responseId : 5255642222,
         votes : 7
+    },
+    {
+        owner : 'Spiderman',
+        message : 'What happen to me?',
+        postId : 8899,
+        ownerId : 1000,
+        responseId : 67832467,
+        votes : 1
     }
 ]
 
