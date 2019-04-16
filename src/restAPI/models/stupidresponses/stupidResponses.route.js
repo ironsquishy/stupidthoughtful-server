@@ -3,13 +3,24 @@ const Passport = require('passport');
 
 const StpdResponse = require('./stupidResponse.services');
 
+//Get
+Router.get('/:postId', Passport.authenticate('jwt', { session : false }), getResponseByPostId);
+
+//Post
 Router.post('/create', Passport.authenticate('jwt', { session : false }), createRespose);
 
+//Put
 Router.put('/update/:responseId', Passport.authenticate('jwt', { session : false }), updateResponse);
-
 Router.put('/vote/:responseId', Passport.authenticate('jwt', { session : false }), voteOnResponse);
 
 module.exports = Router;
+
+
+function getResponseByPostId(req, res, next){
+    StpdResponse.getResponsesByPost(req.params.postId)
+    .then( responses => responses ? res.json(responses) : res.json({}))
+    .catch(err => next(err));
+}
 
 function createRespose(req, res, next){
     let newResponse = {
