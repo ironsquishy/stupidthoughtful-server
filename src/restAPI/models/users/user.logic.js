@@ -6,7 +6,7 @@ class UserLogic{
     }
 
     addNextPostDate(){
-        return new moment().add(1, 'h').toDate();
+        return new moment().add(5, 'm').toDate();
     }
 
     ifAllowedToPost(currentPostDate, nextPostDate){

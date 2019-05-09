@@ -2,41 +2,6 @@ const StpdResponse = require('./stupidResponses.model');
 const StpdPost = require('../stupidpost/stupidPost.model');
 const User = require('../users/user.model');
 
-const MockResponseData = [
-    {
-        owner : 'ironsquishy',
-        message : 'Hey look at me I made a response.',
-        postId : 1234,
-        ownerId : 4356,
-        responseId : 1231895490,
-        votes : 3
-    },
-    {
-        owner : 'Thor',
-        message : 'You humans are some crazy individuals.',
-        postId : 3456,
-        ownerId : 1076,
-        responseId : 42318952342,
-        votes : 9
-    },
-    {
-        owner : 'Captain America',
-        message : 'YEAH!! boy...',
-        postId : 3377,
-        ownerId : 8964,
-        responseId : 5255642222,
-        votes : 7
-    },
-    {
-        owner : 'Spiderman',
-        message : 'What happen to me?',
-        postId : 8899,
-        ownerId : 1000,
-        responseId : 67832467,
-        votes : 1
-    }
-]
-
 module.exports = {
     getResponseById,
     getResponsesByUser,
@@ -56,10 +21,21 @@ async function getResponsesByUser(_username){
 
 }
 
-async function getResponsesByPost(_postId){
-    console.log(`Get response for post => ${_postId}`);
-    return MockResponseData;
-    //return await StpdResponse.find({ postId : _postId});
+async function getResponsesByPost(_postId, _ownerId){
+    try {
+        let populateQuery = {
+            path : 'stpdResponses',
+            options : {
+                sort : { createDate : -1 }
+            }
+        }
+
+        let currentPost = await StpdPost.findById(_postId).populate(populateQuery);
+        return currentPost;
+        
+    } catch (error){
+        throw error;
+    }
 
 }
 
@@ -67,19 +43,18 @@ async function createResponse(newResponse){
     try {
         
         newResponse = new StpdResponse(newResponse);
+        
         let currentPost = await StpdPost.findById(newResponse.postId);
 
         currentPost.stpdResponses.push(newResponse);
 
         await newResponse.save();
 
-        return currentPost.save();
+        return await currentPost.save();
 
     } catch(error){
         return Promise.reject(error);
     }
-
-    
 }
 
 async function updateResponse(updateParams){

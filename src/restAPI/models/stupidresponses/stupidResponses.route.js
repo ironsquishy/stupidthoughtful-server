@@ -7,7 +7,7 @@ const StpdResponse = require('./stupidResponse.services');
 Router.get('/:postId', Passport.authenticate('jwt', { session : false }), getResponseByPostId);
 
 //Post
-Router.post('/create', Passport.authenticate('jwt', { session : false }), createRespose);
+Router.post('/create', Passport.authenticate('jwt', { session : false }), createResponse);
 
 //Put
 Router.put('/update/:responseId', Passport.authenticate('jwt', { session : false }), updateResponse);
@@ -17,15 +17,15 @@ module.exports = Router;
 
 
 function getResponseByPostId(req, res, next){
-    StpdResponse.getResponsesByPost(req.params.postId)
-    .then( responses => responses ? res.json(responses) : res.json({}))
+    StpdResponse.getResponsesByPost(req.params.postId, req.params.ownerId)
+    .then( responses => responses ? res.json(responses) : res.json([]))
     .catch(err => next(err));
 }
 
-function createRespose(req, res, next){
+function createResponse(req, res, next){
     let newResponse = {
-        owner : req.user.username,
-        ownerId : req.user._id,
+        owner : req.body.owner,
+        ownerId : req.body.ownerId,
         postId : req.body.postId,
         message : req.body.message
     };

@@ -40,7 +40,7 @@ async function createPost (_params){
 
 
     var dbQuery = { 
-        ownerId : newPost._id, 
+        ownerId : postUser._id, 
         owner : postUser.username, 
         message : newPost.message
     }
