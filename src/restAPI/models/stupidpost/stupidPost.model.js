@@ -9,7 +9,9 @@ var stupidPostModel = {
     createDate: { type : Date, required: true, default : Date.now },
     message : { type: String, required : true},
     stpdHash : { type: String, required : true, default : defaultStpdHash},
-    stpdResponses : [{ type : mongoose.Schema.Types.ObjectId, ref : 'StpdResponse'}]
+    stpdResponses : [{ type : mongoose.Schema.Types.ObjectId, ref : 'StpdResponse'}],
+    canVote : { type : Boolean, required : false, default : true },
+    userVoted : { type : Boolean, require : false, default : true }
 }
 function defaultStpdHash(){
     

@@ -1,4 +1,8 @@
-const StpdResponse = require('../stupidresponses/stupidResponses.model');
+
+const DB = require('../../helpers/db');
+const StpdVoteModel = require('./vote.model');
+const StpdResponseModel = require('../stupidresponses/stupidResponses.model');
+const StpdPostModel = require('../stupidpost/stupidPost.model');
 
 
 module.exports = {
@@ -12,10 +16,20 @@ async function getVotesByResId(_respId){
     return currentRes.votes;
 }
 
-async function createVote(_respId){
-    var currentRes = await StpdResponse.findById(_respId);
+async function createVote({responseId, postId, voterId }){
+    var currentRes = await StpdResponse.findById(responseId);
+    var currrentPost = await StpdPostModel.findById(postId);
 
-    currentRes.votes++;
+    var newVote = new StpdVoteModel(responseId, postId, voterId)
+    /*Has 24 hours elapsed?*/
+    // currentPost.canVote = false;
+
+
+
+
+
+
+    
     /*TODO also see if it max voted for post */
-    return await currentRes.save();
+    
 }
