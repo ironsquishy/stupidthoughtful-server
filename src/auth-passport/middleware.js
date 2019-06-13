@@ -14,18 +14,18 @@ localOpts.usernameField = 'username';
 localOpts.passwordField = 'password';
 
 async function verifyUser(username, password, done){
-    try{
-        console.log('Verify user if there exist...');
-        var currentUser = await User.findOne({ username, password });
+	try{
+		
+		var currentUser = await User.findOne({ username, password });
 
-        if (!currentUser){
-            return done(null, false, { message : 'Incorrect username or password...'});
-        }
+		if (!currentUser){
+			return done(null, false, { message : 'Incorrect username or password...'});
+		}
 
-        return done( null, currentUser, { message : 'Successfully login'});
-    } catch (err){
-        return done(err);
-    }
+		return done( null, currentUser, { message : 'Successfully login'});
+	} catch (err){
+		return done(err);
+	}
     
 }
 //Assign local strategy
@@ -37,18 +37,18 @@ JwtOpts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
 JwtOpts.secretOrKey = CONFIG.Database.secret;
 
 async function verifyJWT(jwtPayload, done){
-    try {
+	try {
 
-        var user = await User.findById(jwtPayload.sub);
-        return done(null, user);
+		var user = await User.findById(jwtPayload.sub);
+		return done(null, user);
 
-    } catch (err ){
-        return done(err);
-    }
+	} catch (err ){
+		return done(err);
+	}
 }
 
 //Assign JWT Strategy
-passport.use(new JWTStrategy(JwtOpts, verifyJWT))
+passport.use(new JWTStrategy(JwtOpts, verifyJWT));
 
 
 /* Register strategy */
@@ -57,13 +57,12 @@ registerOPts.usernameField = 'username';
 registerOPts.passwordField = 'password';
 
 async function registerUserMiddleware(username, password, done){
-    try {
-        console.log(`New user ${username} and password through passport...`);
-        return done( null, username, password);
+	try {
+		return done( null, username, password);
 
-    } catch (err) {
-        return done(err);
-    }
+	} catch (err) {
+		return done(err);
+	}
 }
 
 passport.use('register', new LocalStrategy(registerOPts, registerUserMiddleware));
