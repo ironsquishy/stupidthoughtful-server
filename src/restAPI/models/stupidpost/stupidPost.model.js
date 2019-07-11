@@ -16,14 +16,12 @@ var stupidPostModel = {
 };
 
 function defaultStpdHash(){
-    
+	
 	return bcrypt.hashSync(this.createDate.toISOString(), 10);
 }
 
 function userCanVote(){
-
-
-
+	
 }
 
 const stupidPostScheme = new Scheme(stupidPostModel).set('toJson', { virtual : true });

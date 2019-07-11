@@ -1,18 +1,19 @@
-var moment = require("moment");
+var moment = require('moment');
 
 class StpdPostLogic{
-    constructor(){
+	constructor(){
 
-    }
+	}
 
-    ifAllowedToPost(currentPostDate){
-        // if(typeof currentPostDate ===  'string'){
-        //     currentPostDate = new Date(currentPostDate);
-        // }
-        var nextPostDate = new moment(currentPostDate).add(24, 'h');
+	ifAllowedToPost(currentPostDate){
+		let nextPostDate = new moment(currentPostDate).add(24, 'h');
 
-        return currentPostDate < nextPostDate;
-    }
+		return currentPostDate < nextPostDate;
+	}
+    
+	ifUserAllowedVote(postVotes, userId){
+		return !postVotes.find(vote => vote.voterId == userId);
+	}
 }
 
 module.exports = StpdPostLogic;

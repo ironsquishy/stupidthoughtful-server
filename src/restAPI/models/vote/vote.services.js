@@ -3,10 +3,13 @@ require('../../helpers/db');
 
 const StpdResponseModel = require('../stupidresponses/stupidResponses.model');
 const StpdPostModel = require('../stupidpost/stupidPost.model');
+const StpdVote = require('./vote.model');
+const StpdPostLogic = require('../stupidpost/stupidPost.logic');
 
 
 module.exports = {
 	getVotesByResId,
+	userAllowedToVote,
 	createVote
 };
 
@@ -16,20 +19,39 @@ async function getVotesByResId(_respId) {
 	return currentRes.votes;
 }
 
+async function userAllowedToVote({postId, userId}){
+	try {
+		let currentPost = await StpdPostModel.findById(postId);
+
+		return StpdPostLogic.ifUserAllowedVote(currentPost.votes, userId);
+	} catch (error){
+		throw error;
+	}
+}
+
 async function createVote({
 	responseId,
 	postId,
 	voterId
 }) {
-	// var currentRes = await StpdResponse.findById(responseId);
-	//console.log(responseId, postId, voterId);
-	var currentPost = await StpdPostModel.findById(postId);
+	try {
 
-	// var newVote = new StpdVoteModel(responseId, postId, voterId);
-	/*Has 24 hours elapsed?*/
-	// currentPost.canVote = false;
-    
-	/*TODO also see if it max voted for post */
-	return currentPost;
+		let currentPost = await StpdPostModel.findById(postId).populate('StpdVote');
+		
+		
+		if(StpdPostLogic.ifUserAllowedVote(currentPost.votes, voterId)) {
+			let newVote = new StpdVote({ responseId, postId, voterId });
+
+			currentPost.voters.push(newVote);
+			currentPost.userVoted = true;
+			newVote.save();
+		} else {
+			currentPost.userVoted = false;
+		}
+
+		return await currentPost.save();
+	} catch (error) {
+		throw error;
+	}
 
 }
