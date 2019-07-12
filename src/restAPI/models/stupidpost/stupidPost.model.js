@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const Scheme = mongoose.Schema;
 
-var stupidPostModel = {
+let stupidPostModel = {
 	ownerId : {type : mongoose.Schema.Types.ObjectId, required  : true,  ref : 'User'},
 	owner : { type : String, required : false},
 	createDate: { type : Date, required: true, default : Date.now },

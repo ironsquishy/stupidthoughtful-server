@@ -23,63 +23,56 @@ Router.delete('/:id', deletHTTP);
 module.exports = Router;
 
 function authenticate(req, res, next){
-    UserServices.authenticate(req.body)
-    .then(user =>  user ? res.json(user) : res.status(400).json({ message : 'Username or password incorrect'}))
-    .catch(err => next(err));
+	UserServices.authenticate(req.body)
+		.then(user =>  user ? res.json(user) : res.status(400).json({ message : 'Username or password incorrect'}))
+		.catch(err => next(err));
 }
 function register(req, res, next){
-    //res.json({ message : 'Successful!'});
-    UserServices.create(req.body)
-    .then(user => res.json(user))
-    .catch(err => next(err));
+	//res.json({ message : 'Successful!'});
+	UserServices.create(req.body)
+		.then(user => res.json(user))
+		.catch(err => next(err));
 }
 
 function getAll(req, res, next){
-    UserServices.getAll()
-    .then(users => res.json(users))
-    .catch( err => next(err));
+	UserServices.getAll()
+		.then(users => res.json(users))
+		.catch( err => next(err));
 }
 
 function getCurrent(req, res, next){
 
-    UserServices.getCurrentUser(req.user)
-    .then(populatedUser => populatedUser ? res.json(populatedUser) : res.sendStatus(404))
-    .catch(err => next(err));
-
-    // UserServices.getById(req.user.sub)
-    // .then(user => user ? res.json(user) : res.sendStatus(404))
-    // .catch(err => next(err));
+	UserServices.getCurrentUser(req.user)
+		.then(populatedUser => populatedUser ? res.json(populatedUser) : res.sendStatus(404))
+		.catch(err => next(err));
 }
 
 function getById(req, res, next){
-    UserServices.getById(req.params.id)
-    .then( user => user ? res.json(user) : res.sendStatus(404))
-    .catch(err => next(err));
+	UserServices.getById(req.params.id)
+		.then( user => user ? res.json(user) : res.sendStatus(404))
+		.catch(err => next(err));
 }
 
 function update(req, res, next){
-    UserServices.delete(req.params.id)
-    .then(() => res.json({message : 'success'}))
-    .catch(err => next(err));
+	UserServices.delete(req.params.id)
+		.then(() => res.json({message : 'success'}))
+		.catch(err => next(err));
 }
 
 function deletHTTP(req, res, next){
-    UserServices.delete(req.params.id)
-    .then(() => res.json({ message : 'success' }))
-    .catch(err => next(err));
+	UserServices.delete(req.params.id)
+		.then(() => res.json({ message : 'success' }))
+		.catch(err => next(err));
 }
 
 function allowedToPost(req, res, next){
     
-    res.json(req.user.allowedPost);
-    // UserServices.allowedToPost(req.query.username)
-    // .then(allowed => allowed ? res.json(allowed) : res.json(false))
-    // .catch( err => next(err));
+	res.json(req.user.allowedPost);
 }
 
 function getAvailibilty(req, res, next){
   
-    UserServices.getCheckNameAvailable(req.query.username)
-    .then( isAvailable => res.json(isAvailable))
-    .catch(err => next(err));
+	UserServices.getCheckNameAvailable(req.query.username)
+		.then( isAvailable => res.json(isAvailable))
+		.catch(err => next(err));
 }

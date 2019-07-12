@@ -15,7 +15,7 @@ module.exports = {
 
 async function getVotesByResId(_respId) {
 
-	var currentRes = await StpdResponseModel.findById(_respId);
+	let currentRes = await StpdResponseModel.findById(_respId);
 	return currentRes.votes;
 }
 

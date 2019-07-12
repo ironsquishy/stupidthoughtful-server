@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserLogic = require('./user.logic');
 
-var UserModal = {
+let UserModal = {
 	username : {type : String, unique : true, required : true},
 	hash : {type : String, required : true},
 	createdDate : { type : Date, default : Date.now },
@@ -22,7 +22,7 @@ module.exports = mongoose.model('User', UserSchema);
 
 function postFindUserTask(){
 
-	var canPost = UserLogic.ifAllowedToPost(this.lastPostDate, this.nextPostDate);
+	let canPost = UserLogic.ifAllowedToPost(this.lastPostDate, this.nextPostDate);
     
 	if(canPost != this.allowedPost){
 		this.allowedPost = canPost;
