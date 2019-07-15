@@ -12,6 +12,8 @@ class StpdPostLogic{
 	}
     
 	ifUserAllowedVote(postVotes, userId){
+		console.log('Check allowed to vote');
+		console.log(postVotes);
 		return !postVotes.find(vote => vote.voterId == userId);
 	}
 }

@@ -7,20 +7,20 @@ const UserService = require('../models/users/user.services');
 module.exports = jwt;
 
 function jwt (){
-    var secret = CONFIG.Database.secret;
+	let secret = CONFIG.Database.secret;
 
-    return expressJWT({ secret, isRevoked})
-        .unless({
-            path : PublicAccess
-        });
+	return expressJWT({ secret, isRevoked})
+		.unless({
+			path : PublicAccess
+		});
 }
 
 async function isRevoked(req, payload, done){
-    var user = await UserService.getById(payload.sub);
+	let user = await UserService.getById(payload.sub);
     
-    if(!user){
-        return done(null, true);
-    }
+	if(!user){
+		return done(null, true);
+	}
 
-    done();
+	done();
 }
