@@ -16,7 +16,6 @@ function addVoteToResponse(req, res,){
 }
 
 function createVote(req, res){
-    
 	StpdVote.createVote(req.body)
 		.then(response => res.json(response))
 		.catch(err => res.json(err));

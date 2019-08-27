@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 
 
 mongoose.connect(CONFIG.Database.connectionStr, { useNewUrlParser: true })
-	.then(() => {
-		console.log('Successfully connected');
+	.then((res) => {
+		console.log('Mongoose Successfully connected to Database...');
 	})
 	.catch((err) => {
-		console.log('Error:', err);
+		console.log('Mongoose Connection Error:', err);
 	});
+
 mongoose.Promise = global.Promise;
 
 module.export = {

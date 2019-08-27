@@ -1,12 +1,15 @@
+const Configs = require('../../../../config.json');
 const moment = require('moment');
 
+const TimeLimitMins = (process.env.NODE_ENV == 'production') ? Configs.ENV.Prod.PostTimeLimitMins : Configs.ENV.Dev.PostTimeLimitMins;
 
 class UserLogic{
 	constructor(){
+	
 	}
 
 	addNextPostDate(){
-		return new moment().add(5, 'm').toDate();
+		return new moment().add(TimeLimitMins, 'm').toDate();
 	}
 
 	ifAllowedToPost(currentPostDate, nextPostDate){

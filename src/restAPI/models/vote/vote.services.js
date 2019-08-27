@@ -10,7 +10,8 @@ const StpdPostLogic = require('../stupidpost/stupidPost.logic');
 module.exports = {
 	getVotesByResId,
 	userAllowedToVote,
-	createVote
+	createVote,
+	getUserVotedResponse
 };
 
 async function getVotesByResId(_respId) {
@@ -19,9 +20,14 @@ async function getVotesByResId(_respId) {
 	return currentRes.votes;
 }
 
+async function getUserVotedResponse({responseId, postId, voterId}){
+	
+	
+}
+
 async function userAllowedToVote({postId, userId}){
 	try {
-		let currentPost = await StpdPostModel.findById(postId);
+		let currentPost = await StpdPostModel.findById(postId).populate('voters');
 
 		return StpdPostLogic.ifUserAllowedVote(currentPost.votes, userId);
 	} catch (error){
@@ -36,22 +42,27 @@ async function createVote({
 }) {
 	try {
 
-		let currentPost = await StpdPostModel.findById(postId).populate('StpdVote');
+		let currentPost = await StpdPostModel.findById(postId).populate('voters');
 		
-		
-		if(StpdPostLogic.ifUserAllowedVote(currentPost.votes, voterId)) {
+	
+		if(StpdPostLogic.ifUserAllowedVote(currentPost.voters, voterId)) {
 			let newVote = new StpdVote({ responseId, postId, voterId });
+			let currentResponse = await StpdResponseModel.findById(responseId);
 
-			currentPost.voters.push(newVote);
-			currentPost.userVoted = true;
-			newVote.save();
-		} else {
-			currentPost.userVoted = false;
+			currentPost.voters.push(voterId);
+			currentResponse.votes++;
+			//newVote.save();
+			//currentResponse.save();
+			console.log('New Vote:', newVote);
+			console.log('Current Response:', currentResponse);
 		}
-
-		return await currentPost.save();
+		
+		//return await currentPost.save();
+		return currentPost;
+		
 	} catch (error) {
 		throw error;
-	}
+		
+	}	
 
 }

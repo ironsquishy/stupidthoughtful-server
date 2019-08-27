@@ -1,4 +1,7 @@
-var moment = require('moment');
+const Configs = require('../../../../config.json');
+const moment = require('moment');
+
+const TimeLimitMins = (process.env.NODE_ENV == 'production') ? Configs.ENV.Prod.PostTimeLimitMins : Configs.ENV.Dev.PostTimeLimitMins;
 
 class StpdPostLogic{
 	constructor(){
@@ -6,16 +9,14 @@ class StpdPostLogic{
 	}
 
 	ifAllowedToPost(currentPostDate){
-		let nextPostDate = new moment(currentPostDate).add(24, 'h');
+		let nextPostDate = new moment(currentPostDate).add(TimeLimitMins, 'm');
 
 		return currentPostDate < nextPostDate;
 	}
     
 	ifUserAllowedVote(postVotes, userId){
-		console.log('Check allowed to vote');
-		console.log(postVotes);
 		return !postVotes.find(vote => vote.voterId == userId);
 	}
 }
 
-module.exports = StpdPostLogic;
+module.exports = new StpdPostLogic();

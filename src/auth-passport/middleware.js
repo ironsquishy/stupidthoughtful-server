@@ -50,6 +50,10 @@ async function verifyJWT(jwtPayload, done){
 //Assign JWT Strategy
 passport.use(new JWTStrategy(JwtOpts, verifyJWT));
 
+/*JWT Passport strategy Loaded and Registered */
+console.log('Passport: JWT Strategy loaded and Registered.');
+
+
 
 /* Register strategy */
 const registerOPts = {};
@@ -66,6 +70,7 @@ async function registerUserMiddleware(username, password, done){
 }
 
 passport.use('register', new LocalStrategy(registerOPts, registerUserMiddleware));
+
 
 
 
