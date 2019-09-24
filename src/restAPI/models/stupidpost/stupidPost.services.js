@@ -19,7 +19,8 @@ module.exports = {
 	getAllbyUser,
 	getAllbyCommunity,
 	getCommunityLatest,
-	getCommunityByHash
+	getCommunityByHash,
+	getPostWithVotes
     
 };
 
@@ -84,7 +85,7 @@ async function getCommunityLatest(){
 			}
 		};
 
-		let returnPosts = await StpdPost.find().sort({ createDate : -1}).limit(2).populate(populateQuery);
+		let returnPosts = await StpdPost.find().sort({ createDate : -1}).limit(2).populate(populateQuery).populate('voters');
         
 		if(!returnPosts.length) {
 			returnPosts = [EmptyPost];
@@ -104,3 +105,10 @@ async function getAllbyCommunity(rtnLimit = 10) {
 	return await StpdPost.find().sort({ createdDate : -1 }).limit(rtnLimit);
 }
 
+async function getPostWithVotes(postId){
+	try {
+		return await StpdPost.findById(postId).populate('voters');
+	} catch (err) {
+		throw err;
+	}
+}

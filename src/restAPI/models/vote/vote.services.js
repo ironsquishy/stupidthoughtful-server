@@ -5,6 +5,7 @@ const StpdResponseModel = require('../stupidresponses/stupidResponses.model');
 const StpdPostModel = require('../stupidpost/stupidPost.model');
 const StpdVote = require('./vote.model');
 const StpdPostLogic = require('../stupidpost/stupidPost.logic');
+const StpdPostService = require('../stupidpost/stupidPost.services');
 
 
 module.exports = {
@@ -41,28 +42,24 @@ async function createVote({
 	voterId
 }) {
 	try {
-
-		let currentPost = await StpdPostModel.findById(postId).populate('voters');
-		
+		let currentPost = await StpdPostService.getPostWithVotes(postId);
 	
 		if(StpdPostLogic.ifUserAllowedVote(currentPost.voters, voterId)) {
 			let newVote = new StpdVote({ responseId, postId, voterId });
 			let currentResponse = await StpdResponseModel.findById(responseId);
 
-			currentPost.voters.push(voterId);
+			currentPost.voters.push(newVote);
 			currentResponse.votes++;
-			//newVote.save();
-			//currentResponse.save();
-			console.log('New Vote:', newVote);
-			console.log('Current Response:', currentResponse);
+			newVote.save();
+			currentResponse.save();
 		}
 		
-		//return await currentPost.save();
-		return currentPost;
-		
+		return await currentPost.save();
+
 	} catch (error) {
 		throw error;
 		
 	}	
 
 }
+

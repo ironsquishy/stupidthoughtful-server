@@ -12,7 +12,7 @@ let stupidPostModel = {
 	stpdResponses : [{ type : mongoose.Schema.Types.ObjectId, ref : 'StpdResponse'}],
 	canVote : { type : Boolean, required : false, default : true },
 	userVoted : { type : Boolean, require : false, default : false },
-	voters : [{ type: Scheme.Types.ObjectId, ref : 'User'}]
+	voters : [{ type: Scheme.Types.ObjectId, ref : 'StpdVote'}]
 };
 
 function defaultStpdHash(){
