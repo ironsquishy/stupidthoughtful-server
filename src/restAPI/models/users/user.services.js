@@ -95,6 +95,9 @@ async function getCurrentUser(_user){
 			path : 'ownedPosts',
 			options : {
 				sort : { createDate : -1 }
+			},
+			populate : {
+				path : 'voters'
 			}
 		};
 		_user = await User.findById(_user._id, { hash :0 }).populate(populateQuery);
